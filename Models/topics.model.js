@@ -7,7 +7,7 @@ function fetchTopics() {
     .then((res) => {
         return res.rows;
     })
-    
+
 }
 
 module.exports = { fetchTopics }
