@@ -7,9 +7,7 @@ function fetchTopics() {
     .then((res) => {
         return res.rows;
     })
-    .catch((error) => {
-        throw error;
-    })
+
 }
 
 module.exports = { fetchTopics }
