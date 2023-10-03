@@ -57,6 +57,55 @@ beforeEach(() => {
                             })
                         
                         })
-                    })     
+                    })   
+                    
+        describe('GET /api/articles/:article_id', () => {
+            test('Returns article objects by ID with the following properties - author, title, article_id, body,topic, created_at, votes, article_img_url', () => {
+                return request(app)
+                .get('/api/articles/3')
+                .expect(200)
+                .then((res) => {
+                    expect(res.body.article).toMatchObject({
+                    author: expect.any(String),
+                    title: expect.any(String),
+                    article_id: 3,
+                    body: expect.any(String),
+                    topic: expect.any(String),
+                    created_at: expect.any(String),
+                    votes: expect.any(Number),
+                    article_img_url: expect.any(String),    
+              
+              })                  
+              })
+            })    
+            
+            test('Returns an error when asked for an article id that does not exist', () => {
+                return request(app)
+                .get('/api/articles/100')
+                .expect(404)
+                .then((res) => {
+                expect(res.body.msg).toBe('Article with this ID not found') 
+                    })
+                })
+
+            test('Returns an error when asked for anything other than a id number', () => {
+                 return request(app)
+                 .get('/api/articles/lemon')
+                 .expect(400)
+                 .then((res) => {
+                 expect(res.body.msg).toBe('Search not possible - please use an id number') 
+                        })
+                    })    
+               
+             })                  
+            
+        
+
+          
+
+
+        
+    
+                                 
             
         
