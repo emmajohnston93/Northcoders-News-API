@@ -1,4 +1,5 @@
-const { fetchTopics } = require('../Models/topics.model');
+const { fetchTopics, fetchEndpoints } = require('../Models/topics.model');
+const endpoints = require('../endpoints.json');
 
 const getTopics = (req, res, next) => {
     fetchTopics().then((topics) => {
@@ -7,5 +8,12 @@ const getTopics = (req, res, next) => {
     .catch(next);
 }
 
+const getEndpoints = (req, res, next) => {
+     res.status(200).json(endpoints)   
+     .catch(next)
+} 
 
-module.exports = { getTopics }
+
+
+
+module.exports = { getTopics, getEndpoints }
