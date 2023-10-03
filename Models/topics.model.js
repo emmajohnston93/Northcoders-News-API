@@ -5,10 +5,11 @@ function fetchTopics() {
     return db
     .query(query)
     .then((res) => {
-        return res.rows;
+     return res.rows;
     })
-
 }
+
+
    
 
 module.exports = { fetchTopics }
