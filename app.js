@@ -1,5 +1,5 @@
 const express = require('express');
-const { getTopics, getEndpoints, getArticleByID } = require('./Controllers/topics.controller');
+const { getTopics, getEndpoints, getArticleByID, getDecendingArticles } = require('./Controllers/topics.controller');
 require('dotenv').config();
 const endpoints = require('./endpoints.json')
 
@@ -10,6 +10,9 @@ app.get('/api/topics', getTopics)
 app.get('/api', getEndpoints) 
 
 app.get('/api/articles/:article_id', getArticleByID)
+
+app.get('/api/articles', getDecendingArticles) 
+/* This endpoint will respond with an array of article objects, sorted in descending order by the created_at date. Each article in the array will have the following properties: author, title, article_id, topic, created_at, votes, article_img_url, comment_count */
 
 app.use((err, req, res, next) => {
 if(err.code === '22P02') {
