@@ -40,7 +40,7 @@ const getComments = (req, res, next) => {
       })
       .catch((err) => {
       next(err); 
-      })
+      })  
 }
 
 

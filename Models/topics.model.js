@@ -37,13 +37,27 @@ return db
 .query(query, [article_id])
 .then((res) => {
   if(res.rows.length === 0) {
-    return Promise.reject({ status: 404, msg: 'Article with this ID not found'});  
+    
+    const query = 'SELECT articles.article_id FROM articles WHERE articles.article_id = $1' 
+    return db
+    .query(query, [article_id])
+    .then((res) => {
+      if(res.rows.length === 1) {
+        return []
+      } 
+      return Promise.reject({ status: 404, msg: 'Article with this ID not found'});  
+
+
+  })  
     } else {
  return res.rows;  
-    }
-  
+  }
 })
 }
+
+
+  
+
  
 
 

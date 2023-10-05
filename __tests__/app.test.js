@@ -106,6 +106,7 @@ beforeEach(() => {
                 .expect(200)
                 .then((res) => {
                  expect(Array.isArray(res.body.articles)).toBe(true);
+                 expect(res.body.articles.length).toBe(13);
                  res.body.articles.forEach((article) => {
                  expect(article).toEqual(expect.objectContaining({
                     author: expect.any(String),
@@ -120,7 +121,6 @@ beforeEach(() => {
                  }))
                expect(article).not.toHaveProperty('body');
                 })
-                 expect(res.body.articles.length).toBe(13);
                  
                  expect(res.body.articles).toBeSortedBy('created_at', { descending: true });
                 
@@ -136,6 +136,7 @@ beforeEach(() => {
                 .expect(200)
                 .then((res) => {   
                     expect(Array.isArray(res.body.comments)).toBe(true);
+                    expect(res.body.comments.length).toBe(11);
                     res.body.comments.forEach((comment) => {
                     expect(comment).toEqual(expect.objectContaining({
                        comment_id: expect.any(Number), 
@@ -148,8 +149,6 @@ beforeEach(() => {
                     })
                     )
                 })
-
-                expect(res.body.comments.length).toBe(11);
 
                 expect(res.body.comments).toBeSortedBy('created_at', { ascending: true });             
 
@@ -166,7 +165,47 @@ beforeEach(() => {
          })
         })
 
-    })
+        test('Returns an error when asked for comments of an article id without using a number', () => {
+            return request(app)
+            .get('/api/articles/orange/comments')
+            .expect(400)
+            .then((res) => {
+             expect(res.body.msg).toBe('Search not possible - please use an id number') 
+                   })
+               })  
+    
+
+    test('Returns an empty array when asked for an article id that has no comments', () => {
+        return request(app)
+        .get('/api/articles/2/comments')
+        .expect(200)
+        .then((res) => {
+         expect(res.body.comments).toEqual([]) 
+               })
+           })  
+})
+
+    // describe('POST /api/articles/:article_id/comments', () => {
+    //     test('Add a comment to an article with a username and body property', () => {
+    //         return request(app)
+    //             .get('/api/articles/1/comments')
+    //             .expect(200)
+    //             .then((res) => {
+    //             expect(res.body.comments).toHaveLength(1);
+    //             res.body.comments.forEach((comment) => {
+    //             expect(comment).toEqual(expect.objectContaining({
+    //             username: expect.any(String),
+    //             body: expect.any(String),   
+                    
+    //                     })
+    //             )
+    //                 })
+    //             })
+    //         })
+    //     })
+            
+        
+
 
         
             
