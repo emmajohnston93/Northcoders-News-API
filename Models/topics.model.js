@@ -31,8 +31,37 @@ return res.rows;
 })
 }
 
+function fetchComments(article_id) {
+const query = 'SELECT comments.comment_id, comments.votes, comments.created_at, comments.author, comments.body, comments.article_id FROM comments WHERE comments.article_id = $1 ORDER BY comments.created_at ASC;';
+return db
+.query(query, [article_id])
+.then((res) => {
+  if(res.rows.length === 0) {
+    
+    const query = 'SELECT articles.article_id FROM articles WHERE articles.article_id = $1' 
+    return db
+    .query(query, [article_id])
+    .then((res) => {
+      if(res.rows.length === 1) {
+        return []
+      } 
+      return Promise.reject({ status: 404, msg: 'Article with this ID not found'});  
+
+
+  })  
+    } else {
+ return res.rows;  
+  }
+})
+}
+
+
+  
+
+ 
+
 
 
    
 
-module.exports = { fetchTopics, fetchArticleByID, fetchDecendingArticles }
+module.exports = { fetchTopics, fetchArticleByID, fetchDecendingArticles, fetchComments }
