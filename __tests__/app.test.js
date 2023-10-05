@@ -128,6 +128,46 @@ beforeEach(() => {
                 })
             })
         })
+
+        describe('GET /api/articles/:article_id/comments', () => {
+            test('Returns an array of comments for the requested article, comments should be returned with the most recent first. Each article should have a comment_id, votes, created_at, author, body, article_id', () => {
+                return request(app)
+                .get('/api/articles/1/comments')
+                .expect(200)
+                .then((res) => {   
+                    expect(Array.isArray(res.body.comments)).toBe(true);
+                    res.body.comments.forEach((comment) => {
+                    expect(comment).toEqual(expect.objectContaining({
+                       comment_id: expect.any(Number), 
+                       votes: expect.any(Number),
+                       created_at: expect.any(String),
+                       author: expect.any(String),
+                       body: expect.any(String),
+                       article_id: expect.any(Number),
+                       
+                    })
+                    )
+                })
+
+                expect(res.body.comments.length).toBe(11);
+
+                expect(res.body.comments).toBeSortedBy('created_at', { ascending: true });             
+
+            })
+      })
+
+      test('Returns an error when asked for comments of an article id that does not exist', () => {
+        return request(app)
+        .get('/api/articles/75/comments')
+        .expect(404)
+        .then((res) => { 
+         expect(res.body.msg).toBe('Article with this ID not found') 
+
+         })
+        })
+
+    })
+
         
             
         
