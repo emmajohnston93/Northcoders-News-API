@@ -1,5 +1,5 @@
 const express = require('express');
-const { getTopics, getEndpoints, getArticleByID, getDecendingArticles, getComments, postComment } = require('./Controllers/topics.controller');
+const { getTopics, getEndpoints, getArticleByID, getDecendingArticles, getComments, postComment, patchArticle } = require('./Controllers/topics.controller');
 require('dotenv').config();
 const endpoints = require('./endpoints.json')
 
@@ -22,8 +22,10 @@ app.get('/api/articles/:article_id/comments', getComments)
 app.post('/api/articles/:article_id/comments', postComment)
 /* This endpoint will add a comment to the requested article and will include a username and body property */
 
+
+app.patch('/api/articles/:article_id', patchArticle) 
+
 app.use((err, req, res, next) => {
-  console.log(err)
 if(err.code === '22P02') {
   res.status(400).send({msg: 'Search not possible - please use an id number' })   
 } else if(err.code === '23503') {

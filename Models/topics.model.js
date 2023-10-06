@@ -68,6 +68,20 @@ return newComment
 })
 }
 
+function updateArticle(article_id, inc_votes) {
+const query = 'UPDATE articles SET votes = votes + $1 WHERE article_id = $2 RETURNING *'
+return db
+.query(query, [inc_votes, article_id])
+.then((res) => {
+  if(res.rows.length === 0) {
+    return Promise.reject({ status: 404, msg: 'Article with this ID not found'});  
+    } else {  
+const newProperty = res.rows[0]
+return newProperty
+    }
+})
+}
+
 
 
 
@@ -81,4 +95,4 @@ return newComment
 
    
 
-module.exports = { fetchTopics, fetchArticleByID, fetchDecendingArticles, fetchComments, addComment }
+module.exports = { fetchTopics, fetchArticleByID, fetchDecendingArticles, fetchComments, addComment, updateArticle }

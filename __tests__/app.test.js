@@ -245,7 +245,57 @@ beforeEach(() => {
                 })      
         })
 
-               
+       
+        describe('PATCH /api/articles/:article_id', () => {
+            test('Update an article votes by its id, inc_votes will inc or dec the current votes depending on what is requested', () => {
+                const articleUpdate = { inc_votes: 1 }
+                return request(app)
+                    .patch('/api/articles/1')
+                    .send(articleUpdate) 
+                    .expect(200)
+                    .then((res) => { 
+                     expect(res.body.article.votes).toEqual(101) 
+                    })
+    
+                })
+
+            test('Returns an error when updating article votes by an article id that does not exist, using inc_votes', () => {
+                const articleUpdate = { inc_votes: 1 }
+                return request(app)
+                     .patch('/api/articles/100')
+                     .send(articleUpdate) 
+                     .expect(404)
+                     .then((res) => { 
+                        expect(res.body.msg).toBe('Article with this ID not found') 
+                      })
+        
+                    })  
+                    
+          test('Returns an error when updating article votes by an article id, when inc_votes is not given a value', () => {
+                const articleUpdate = { inc_votes: undefined }
+                 return request(app)
+                     .patch('/api/articles/1')
+                     .send(articleUpdate) 
+                     .expect(400)
+                     .then((res) => { 
+                      expect(res.body.msg).toBe('Must include the required properties for this request') 
+                      })
+                
+                  })         
+
+             test('Returns an error when updating article votes by an article id, when inc_votes is a sring', () => {
+                const articleUpdate = { inc_votes: 'one' }
+                  return request(app)
+                 .patch('/api/articles/1')
+                 .send(articleUpdate) 
+                 .expect(400)
+                 .then((res) => { 
+                  expect(res.body.msg).toBe('Search not possible - please use an id number') 
+                        })
+                    
+                   })              
+
+            })
                     
       
             
