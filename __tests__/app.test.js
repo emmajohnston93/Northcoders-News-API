@@ -283,6 +283,18 @@ beforeEach(() => {
                 
                   })         
 
+             test('Returns an error when updating article votes by an article id, when inc_votes is a sring', () => {
+                const articleUpdate = { inc_votes: 'one' }
+                  return request(app)
+                 .patch('/api/articles/1')
+                 .send(articleUpdate) 
+                 .expect(400)
+                 .then((res) => { 
+                  expect(res.body.msg).toBe('Search not possible - please use an id number') 
+                        })
+                    
+                   })              
+
             })
                     
       
