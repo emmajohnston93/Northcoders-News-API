@@ -1,4 +1,4 @@
-const { fetchTopics, fetchArticleByID, fetchDecendingArticles  } = require('../Models/topics.model');
+const { fetchTopics, fetchArticleByID, fetchDecendingArticles, fetchComments, addComment  } = require('../Models/topics.model');
 const endpoints = require('../endpoints.json');
 
 const getTopics = (req, res, next) => {
@@ -32,7 +32,32 @@ const getDecendingArticles = (req, res, next) => {
     
 }
 
+const getComments = (req, res, next) => {
+      const { article_id } = req.params;
+      fetchComments(article_id)
+      .then((comments) => {
+      res.status(200).send({ comments });      
+      })
+      .catch((err) => {
+      next(err); 
+      })  
+}
+
+const postComment = (req, res, next) => {
+      const { article_id } = req.params;
+      const newComment = req.body;
+      addComment(article_id, newComment).then((comment) => { 
+      res.status(201).send({ comment });      
+      })
+      .catch((err) => {
+        next(err); 
+      })  
+
+}
 
 
 
-module.exports = { getTopics, getEndpoints, getArticleByID, getDecendingArticles }
+
+
+
+module.exports = { getTopics, getEndpoints, getArticleByID, getDecendingArticles, getComments, postComment }

@@ -106,6 +106,7 @@ beforeEach(() => {
                 .expect(200)
                 .then((res) => {
                  expect(Array.isArray(res.body.articles)).toBe(true);
+                 expect(res.body.articles.length).toBe(13);
                  res.body.articles.forEach((article) => {
                  expect(article).toEqual(expect.objectContaining({
                     author: expect.any(String),
@@ -120,7 +121,6 @@ beforeEach(() => {
                  }))
                expect(article).not.toHaveProperty('body');
                 })
-                 expect(res.body.articles.length).toBe(13);
                  
                  expect(res.body.articles).toBeSortedBy('created_at', { descending: true });
                 
@@ -128,6 +128,129 @@ beforeEach(() => {
                 })
             })
         })
+
+        describe('GET /api/articles/:article_id/comments', () => {
+            test('Returns an array of comments for the requested article, comments should be returned with the most recent first. Each article should have a comment_id, votes, created_at, author, body, article_id', () => {
+                return request(app)
+                .get('/api/articles/1/comments')
+                .expect(200)
+                .then((res) => {   
+                    expect(Array.isArray(res.body.comments)).toBe(true);
+                    expect(res.body.comments.length).toBe(11);
+                    res.body.comments.forEach((comment) => {
+                    expect(comment).toEqual(expect.objectContaining({
+                       comment_id: expect.any(Number), 
+                       votes: expect.any(Number),
+                       created_at: expect.any(String),
+                       author: expect.any(String),
+                       body: expect.any(String),
+                       article_id: expect.any(Number),
+                       
+                    })
+                    )
+                })
+
+                expect(res.body.comments).toBeSortedBy('created_at', { ascending: true });             
+
+            })
+      })
+
+      test('Returns an error when asked for comments of an article id that does not exist', () => {
+        return request(app)
+        .get('/api/articles/75/comments')
+        .expect(404)
+        .then((res) => { 
+         expect(res.body.msg).toBe('Article with this ID not found') 
+
+         })
+        })
+
+        test('Returns an error when asked for comments of an article id without using a number', () => {
+            return request(app)
+            .get('/api/articles/orange/comments')
+            .expect(400)
+            .then((res) => {
+             expect(res.body.msg).toBe('Search not possible - please use an id number') 
+                   })
+               })  
+    
+
+    test('Returns an empty array when asked for an article id that has no comments', () => {
+        return request(app)
+        .get('/api/articles/2/comments')
+        .expect(200)
+        .then((res) => {
+         expect(res.body.comments).toEqual([]) 
+               })
+           })  
+})
+
+    describe('POST /api/articles/:article_id/comments', () => {
+        test('Add a comment to an article with a username and body property', () => {
+            return request(app)
+                .post('/api/articles/3/comments')
+                .send({username: 'butter_bridge', body: 'this is a new comment'}) 
+                .expect(201)
+                .then((res) => { 
+                 expect(res.body.comment).toEqual({article_id: 3, author: 'butter_bridge', body: 'this is a new comment', comment_id: expect.any(Number), created_at: expect.any(String), votes: 0 }) 
+                })
+
+            })
+
+            test('Returns an error when trying to post to an article id that does not exist', () => {
+                return request(app)
+                    .post('/api/articles/50/comments')
+                    .send({username: 'icellusedkars', body: 'this is another new comment'}) 
+                    .expect(404)
+                    .then((res) => { 
+                    expect(res.body.msg).toBe('Article with this ID not found') 
+                    })
+    
+                })
+
+               test('Returns an error when trying to post to an article id that is not a number', () => {
+                return request(app)
+                 .post('/api/articles/banana/comments')
+                 .send({username: 'icellusedkars', body: 'this is another new comment'}) 
+                 .expect(400)
+                 .then((res) => { 
+                  expect(res.body.msg).toBe('Search not possible - please use an id number') 
+                        })
+        
+                    })
+
+                 
+               test('Returns an error when trying to post a comment without the required properties', () => {
+                return request(app)
+                 .post('/api/articles/3/comments')
+                 .send({}) 
+                 .expect(400)
+                 .then((res) => { 
+                  expect(res.body.msg).toBe('Must include the required properties for this request') 
+                        })
+        
+                    })   
+
+   
+                test('Add a comment to an article with a username, body and topic property, topic should be ignored', () => {
+                return request(app)
+                .post('/api/articles/3/comments')
+                 .send({username: 'rogersop', body: 'this is another new comment', topic: 'this property needs to be ignored'}) 
+                 .expect(201)
+                 .then((res) => { 
+                expect(res.body.comment).toEqual({article_id: 3, author: 'rogersop', body: 'this is another new comment', comment_id: expect.any(Number), created_at: expect.any(String), votes: 0 }) 
+                 })
+                
+                })      
+        })
+
+               
+                    
+      
+            
+        
+
+
         
             
         
