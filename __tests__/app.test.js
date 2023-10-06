@@ -296,9 +296,39 @@ beforeEach(() => {
                    })              
 
             })
+
+
                     
-      
-            
+         describe('DELETE /api/comments/:comment_id', () => {
+         test('Returns nothing/undefined when a comment has been deleted by its id', () => {
+             return request(app)
+             .delete('/api/comments/3')
+             .expect(204)
+                  
+        
+              })
+
+            test('Returns a 404 error when trying to delete a comment by an id that dosent exist', () => {
+             return request(app)
+             .delete('/api/comments/600')
+             .expect(404)
+             .then((res) => { 
+             expect(res.body.msg).toBe('Comment with this ID not found') 
+                  })
+        
+              })
+
+              test('Returns a 400 error when trying to delete a comment by an id that is not a number', () => {
+                return request(app)
+                .delete('/api/comments/four')
+                .expect(400)
+                .then((res) => { 
+                expect(res.body.msg).toBe('Search not possible - please use an id number') 
+                     })
+           
+                 })
+            })       
+           
         
 
 
