@@ -1,5 +1,5 @@
 const express = require('express');
-const { getTopics, getEndpoints, getArticleByID, getDecendingArticles, getComments, postComment } = require('./Controllers/topics.controller');
+const { getTopics, getEndpoints, getArticleByID, getDecendingArticles, getComments, postComment, getComments } = require('./Controllers/topics.controller');
 require('dotenv').config();
 const endpoints = require('./endpoints.json')
 

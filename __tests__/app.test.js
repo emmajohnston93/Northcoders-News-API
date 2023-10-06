@@ -107,6 +107,7 @@ beforeEach(() => {
                 .then((res) => {
                  expect(Array.isArray(res.body.articles)).toBe(true);
                  expect(res.body.articles.length).toBe(13);
+                 expect(res.body.articles.length).toBe(13);
                  res.body.articles.forEach((article) => {
                  expect(article).toEqual(expect.objectContaining({
                     author: expect.any(String),
