@@ -78,6 +78,7 @@ return newComment
 
 
 
+
    
 
 module.exports = { fetchTopics, fetchArticleByID, fetchDecendingArticles, fetchComments, addComment }
