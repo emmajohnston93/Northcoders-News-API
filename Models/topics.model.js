@@ -84,6 +84,23 @@ return newProperty
 
 
 
+function removeComment(comment_id) {
+  const query = 'DELETE FROM comments WHERE comment_id = $1 RETURNING *'
+  return db
+  .query(query, [comment_id])
+  .then((res) => {
+    console.log(res.rows)
+    if(res.rows.length === 0) {
+      return Promise.reject({ status: 404, msg: 'Comment with this ID not found'});  
+      } else {  
+  const commentGone = res.rows[0]
+  return commentGone
+      }
+  })
+  }
+
+
+
 
   
 
@@ -95,4 +112,4 @@ return newProperty
 
    
 
-module.exports = { fetchTopics, fetchArticleByID, fetchDecendingArticles, fetchComments, addComment, updateArticle }
+module.exports = { fetchTopics, fetchArticleByID, fetchDecendingArticles, fetchComments, addComment, updateArticle, removeComment }
