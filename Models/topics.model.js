@@ -46,14 +46,29 @@ return db
         return []
       } 
       return Promise.reject({ status: 404, msg: 'Article with this ID not found'});  
-
-
   })  
     } else {
  return res.rows;  
   }
 })
 }
+
+function addComment(article_id, commentToAdd) {
+const { username, body } = commentToAdd
+const query = 'INSERT INTO comments (author, body, article_id) VALUES ($1, $2, $3) RETURNING *'
+return db
+.query(query, [username, body, article_id])
+.then((res) => {
+  if(res.rows.length === 0) {
+    return Promise.reject({ status: 404, msg: 'Article with this ID not found'});  
+    } else {  
+const newComment = res.rows[0]
+return newComment
+    }
+})
+}
+
+
 
 
   
@@ -62,6 +77,8 @@ return db
 
 
 
+
+
    
 
-module.exports = { fetchTopics, fetchArticleByID, fetchDecendingArticles, fetchComments }
+module.exports = { fetchTopics, fetchArticleByID, fetchDecendingArticles, fetchComments, addComment }
