@@ -1,5 +1,5 @@
 const express = require('express');
-const { getTopics, getEndpoints, getArticleByID, getDecendingArticles, getComments, postComment, patchArticle, deleteComment } = require('./Controllers/topics.controller');
+const { getTopics, getEndpoints, getArticleByID, getDecendingArticles, getComments, postComment, patchArticle, deleteComment, getUsers } = require('./Controllers/topics.controller');
 require('dotenv').config();
 const endpoints = require('./endpoints.json')
 
@@ -18,6 +18,8 @@ app.get('/api/articles', getDecendingArticles)
 
 app.get('/api/articles/:article_id/comments', getComments)
 /* This endpoint will respond with an array of all the comments for the requested article, sorted by created_at with the most recent first. Each comment in the array will have the following properties: comments_id, votes, created_at, auhor, body, article_id */
+
+app.get('/api/users', getUsers)
 
 app.post('/api/articles/:article_id/comments', postComment)
 /* This endpoint will add a comment to the requested article and will include a username and body property */

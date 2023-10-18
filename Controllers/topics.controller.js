@@ -1,4 +1,4 @@
-const { fetchTopics, fetchArticleByID, fetchDecendingArticles, fetchComments, addComment, updateArticle, removeComment  } = require('../Models/topics.model');
+const { fetchTopics, fetchArticleByID, fetchDecendingArticles, fetchComments, addComment, updateArticle, removeComment, fetchUsers  } = require('../Models/topics.model');
 const endpoints = require('../endpoints.json');
 
 const getTopics = (req, res, next) => {
@@ -76,11 +76,20 @@ const deleteComment = (req, res, next) => {
       .catch((err) => {
        next(err);      
         })
-}
+
+      }
+
+        const getUsers = (req, res, next) => {
+            fetchUsers().then((users) => {
+            res.status(200).send({users})    
+            })
+            .catch(next);
+        }
 
 
 
 
 
 
-module.exports = { getTopics, getEndpoints, getArticleByID, getDecendingArticles, getComments, postComment, patchArticle, deleteComment }
+
+module.exports = { getTopics, getEndpoints, getArticleByID, getDecendingArticles, getComments, postComment, patchArticle, deleteComment, getUsers }

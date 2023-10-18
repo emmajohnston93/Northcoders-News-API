@@ -327,7 +327,40 @@ beforeEach(() => {
                      })
            
                  })
-            })       
+            })   
+            
+            describe('GET /api/users', () => {
+                test('returns an array of user object each with a username, name and avatar url property', () => {
+                    return request(app)
+                        .get('/api/users')
+                        .expect(200)
+                        .then(({ body }) => {
+                            expect(body.users).toHaveLength(4);
+                            body.users.forEach((user) => {
+                            expect(user).toMatchObject({
+                            username: expect.any(String),
+                            name: expect.any(String),
+                            avatar_url: expect.any(String),
+                                })
+                            
+                            })
+                        })     
+                    })
+
+                })
+
+                
+          test('returns a 404 error if the endpoint dosent exist', () => {
+             return request(app)
+            .get('/api/userss')
+            .expect(404)
+            .then((res) => {
+             expect(res.body.msg).toBe('Error 404 - Not Found')
+            
+               })
+             })
+            
+        
            
         
 
