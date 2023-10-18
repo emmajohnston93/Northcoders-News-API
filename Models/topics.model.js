@@ -89,7 +89,6 @@ function removeComment(comment_id) {
   return db
   .query(query, [comment_id])
   .then((res) => {
-    console.log(res.rows)
     if(res.rows.length === 0) {
       return Promise.reject({ status: 404, msg: 'Comment with this ID not found'});  
       } else {  
