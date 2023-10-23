@@ -2,8 +2,10 @@ const express = require('express');
 const { getTopics, getEndpoints, getArticleByID, getDecendingArticles, getComments, postComment, patchArticle, deleteComment, getUsers } = require('./Controllers/topics.controller');
 require('dotenv').config();
 const endpoints = require('./endpoints.json')
-
+const cors = require('cors');
 const app = express();
+
+app.use(cors());
 
 app.use(express.json())
 
